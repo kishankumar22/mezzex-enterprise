@@ -49,15 +49,10 @@ export function HeroSection() {
             </div>
 
             {/* Heading */}
-            <h1 className="mb-5 text-[30px] font-bold leading-[1.08] text-[#0f172a] sm:text-[40px] md:text-[48px] lg:text-[54px]">
-              Web Design,
+            <h1 className="mb-5 text-[20px] font-bold leading-[1.08] text-[#0f172a] sm:text-[40px] md:text-[48px] lg:text-[44px]">
+              Web Design, Develop,
               <br />
-              Develop,
-              <br />
-              Implement &{' '}
-              <span className="text-[#2f5a84]">
-                IT Solutions
-              </span>
+              Implement & <span className="text-[#2f5a84]">IT Solutions</span>
             </h1>
 
             {/* Description */}

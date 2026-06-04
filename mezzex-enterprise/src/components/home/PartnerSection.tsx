@@ -25,7 +25,7 @@ export function PartnerSection() {
 <section className="overflow-hidden">
           {/* HEADING */}
 {/* HEADING */}
-<div className="bg-white py-20">
+<div className="bg-white py-8">
   <motion.div
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -42,8 +42,8 @@ export function PartnerSection() {
     </h2>
   </motion.div>
 </div>
-   <div className="bg-[#2f5a84] py-10">
-  <div className="relative max-w-[1600px] mx-auto px-14">
+   <div className="bg-[#2f5a84] py-4">
+  <div className="relative max-w-[1600px] mx-auto px-10">
 
         {/* LEFT BUTTON */}
         <button className="partner-prev absolute left-2 top-1/2 z-30 -translate-y-1/2 w-10 h-10 rounded-full border border-white/70 bg-[#2f5a84] flex items-center justify-center">

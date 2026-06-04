@@ -8,11 +8,11 @@ export async function BlogPreview() {
   const blogs = await getLatestBlogs(3);
 
   return (
-    <section className="py-24 bg-[#f7f9fc]">
+    <section className="py-18 bg-[#f7f9fc]">
   <div className="container mx-auto px-4 lg:px-8">
         
         <div className="text-center mb-16">
-          <h6 className="text-[#2f5a84] font-semibold tracking-wider uppercase mb-2">Our Blog</h6>
+          <h6 className="text-orange-400 font-semibold tracking-wider uppercase mb-2">Our Blog</h6>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Latest News & Insights</h2>
         </div>
 

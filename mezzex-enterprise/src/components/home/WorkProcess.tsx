@@ -50,7 +50,7 @@ export function WorkProcess() {
       <div className="container mx-auto px-4 lg:px-8">
         
         <div className="text-center mb-8">
-          <h6 className="text-[#2f5a84] font-semibold tracking-wider uppercase mb-2">How We Work</h6>
+          <h6 className="text-orange-400 font-semibold tracking-wider uppercase mb-2">How We Work</h6>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Work Process</h2>
         </div>
 

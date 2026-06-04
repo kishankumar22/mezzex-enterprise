@@ -49,7 +49,7 @@ export function WhyPartner() {
             transition={{ duration: 0.6 }}
             className="flex flex-col justify-center h-full"
           >
-            <h6 className="text-[#2f5a84] font-semibold tracking-wider uppercase mb-2">
+            <h6 className="text-orange-400 font-semibold tracking-wider uppercase mb-2">
               Why Partner With Mezzex?
             </h6>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">

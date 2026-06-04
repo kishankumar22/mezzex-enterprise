@@ -9,6 +9,10 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+# misc
+.DS_Store
+*.pem
+*.zip
 
 # testing
 /coverage

@@ -27,7 +27,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
   }
 
   return (
-    <div className="pt-32 pb-24 min-h-screen">
+    <div className="pt-3 pb-4 min-h-screen">
       <div className="container mx-auto px-4 lg:px-8">
         
         <Link href="/services" className="inline-flex items-center text-gray-500 hover:text-[#2f5a84] mb-8 font-medium transition-colors">

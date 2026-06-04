@@ -17,9 +17,9 @@ export default function Home() {
       <CounterSection />
       <WorkProcess />
       <WhyPartner />
+      <OtherServices />
       <OverviewSection />
       <HireSection />
-      <OtherServices />
       <PartnerSection />   
       <BlogPreview />
     </>

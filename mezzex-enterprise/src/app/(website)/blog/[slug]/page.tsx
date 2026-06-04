@@ -28,7 +28,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   }
 
   return (
-    <article className="pt-32 pb-24 min-h-screen">
+    <article className="pt-3 pb-4 min-h-screen">
       <div className="container mx-auto px-4 lg:px-8">
         
         <div className="max-w-4xl mx-auto">

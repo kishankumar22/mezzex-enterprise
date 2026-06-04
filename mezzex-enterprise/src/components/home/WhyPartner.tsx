@@ -18,6 +18,29 @@ export function WhyPartner() {
     <section className="py-12 md:py-16 bg-white overflow-hidden">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-stretch min-h-[400px]">
+
+              {/* Right image */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative h-[300px] md:h-[400px] lg:h-[600px] rounded-3xl overflow-hidden shadow-2xl"
+          >
+            <Image
+              src="https://mezzex.com/assets/img/choose-1.jpg"
+              alt="Why partner with Mezzex"
+              fill
+              className="object-cover"
+            />
+            {/* Optional gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#2f5a84]/80 to-transparent" />
+            {/* Trust badge overlay */}
+            <div className="absolute bottom-8 left-8 text-white">
+              <div className="text-4xl font-bold mb-2">10+</div>
+              <div className="text-lg">Years of Trust</div>
+            </div>
+          </motion.div>
           {/* Left text/content */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -52,28 +75,7 @@ export function WhyPartner() {
             </div>
           </motion.div>
 
-          {/* Right image */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative h-[300px] md:h-[400px] lg:h-[600px] rounded-3xl overflow-hidden shadow-2xl"
-          >
-            <Image
-              src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80"
-              alt="Why partner with Mezzex"
-              fill
-              className="object-cover"
-            />
-            {/* Optional gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#2f5a84]/80 to-transparent" />
-            {/* Trust badge overlay */}
-            <div className="absolute bottom-8 left-8 text-white">
-              <div className="text-4xl font-bold mb-2">10+</div>
-              <div className="text-lg">Years of Trust</div>
-            </div>
-          </motion.div>
+      
         </div>
       </div>
     </section>

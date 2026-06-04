@@ -13,7 +13,7 @@ const tabs = [
     heading: 'Research And Strategy',
     desc: 'Besides building websites and applications, Mezzex designs digitally anchored solutions from extensive data-driven research and strategic planning. The foundation of any successful project lies in a deep understanding of your particular needs, your target audience, and the competitive environment.',
     points: ['Understanding Your Goals', 'Understand Your Audience', 'Study the Competition', 'Insights into Market Trends', 'Building a Winning Strategy'],
-    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80',
+    image: 'https://mezzex.com/assets/img/process/tab-process-1.jpg',
   },
   {
     id: 'design',
@@ -21,7 +21,7 @@ const tabs = [
     heading: 'Our Design Team',
     desc: 'Our design team translates strategic insights into effective, friendly designs visually. From the outset, we strive to build intuitive interfaces that can enhance user experience and interaction.',
     points: ['Conceptual Design', 'User Experience (UX) Design', 'Visual Design', 'Feedback and Iteration'],
-    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80',
+    image: 'https://mezzex.com/assets/img/process/tab-process-2.jpg',
   },
   {
     id: 'build',
@@ -29,7 +29,7 @@ const tabs = [
     heading: 'Development & Testing',
     desc: 'Our development team brings designs to life through clean, efficient code and rigorous testing of functionality and performance.',
     points: ['Front End Development', 'Back-End Development', 'Quality Assurance', 'Performance Optimisation'],
-    image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80',
+    image: 'https://mezzex.com/assets/img/process/tab-process-3.jpg',
   },
   {
     id: 'delivery',
@@ -37,7 +37,7 @@ const tabs = [
     heading: 'Finally, We Deliver Website',
     desc: 'Finally, hand over a fully functional, high-quality digital solution that fulfils the needs of your business and meets all expectations.',
     points: ['Launch Preparation', 'Training and Support', 'Post-Launch Analysis', 'Continuous Improvement'],
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
+    image: 'https://mezzex.com/assets/img/process/tab-process-4.jpg',
   },
 ];
 
@@ -49,7 +49,7 @@ export function WorkProcess() {
     <section className="py-12 md:py-16 bg-gray-50">
       <div className="container mx-auto px-4 lg:px-8">
         
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <h6 className="text-[#2f5a84] font-semibold tracking-wider uppercase mb-2">How We Work</h6>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Work Process</h2>
         </div>

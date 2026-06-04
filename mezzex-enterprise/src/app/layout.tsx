@@ -29,13 +29,18 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/images/favicon.png" />
       </head>
-      <body className={`${jost.variable} font-sans antialiased`}>
-        <SmoothScrollProvider>
-          <Header />
-          <main className="min-h-screen mt-6 md:mt-0">{children}</main>
-          <Footer />
-        </SmoothScrollProvider>
-      </body>
+ <body className={`${jost.variable} font-sans antialiased`}>
+  <SmoothScrollProvider>
+    <Header />
+
+    {/* REMOVE mt-6 md:mt-0 */}
+    <main className="min-h-screen overflow-hidden">
+      {children}
+    </main>
+
+    <Footer />
+  </SmoothScrollProvider>
+</body>
     </html>
   );
 }

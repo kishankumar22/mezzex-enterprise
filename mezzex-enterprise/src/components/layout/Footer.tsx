@@ -12,11 +12,10 @@ import {
 export function Footer() {
   return (
     <footer className="overflow-hidden bg-[#071321] text-gray-300">
-
       {/* TOP */}
-      <div className="container mx-auto px-5 py-10 lg:px-8 lg:py-12">
+      <div className="container mx-auto px-5 py-5 lg:px-6 lg:py-12">
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-5">
 
           {/* COMPANY */}
           <div className="max-w-[360px]">
@@ -94,7 +93,7 @@ export function Footer() {
 
           {/* COMPANY LINKS */}
           <div>
-            <h4 className="mb-5 text-[24px] font-semibold text-white">
+            <h4 className="mb-5 text-[24px] font-semibold text-[#4BEAFF]">
               Company
             </h4>
 
@@ -157,9 +156,53 @@ export function Footer() {
             </ul>
           </div>
 
+              {/* HELP */}
+          <div>
+            <h4 className="mb-5 text-[24px] font-semibold text-[#4BEAFF]">Let Us Help You</h4>
+            <ul className="space-y-3 text-[15px]">
+              <li>
+                <Link href="/privacy" className="transition-colors hover:text-[#4BEAFF]">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms-and-conditions" className="transition-colors hover:text-[#4BEAFF]">
+                  Terms &amp; Conditions
+                </Link>
+              </li>
+              <li>
+                <Link href="/faq" className="transition-colors hover:text-[#4BEAFF]">
+                  FAQ
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog" className="transition-colors hover:text-[#4BEAFF]">
+                  Blog
+                </Link>
+              </li>
+               <li>
+                <Link
+                  href="/seo-tool"
+                  className="transition-colors hover:text-[#4BEAFF]"
+                >
+                  SEO Checker Tool
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  href="/free-seo-audit"
+                  className="transition-colors hover:text-[#4BEAFF]"
+                >
+                  Free SEO Audit
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           {/* SERVICES */}
           <div>
-            <h4 className="mb-5 text-[24px] font-semibold text-white">
+            <h4 className="mb-5 text-[24px] font-semibold text-[#4BEAFF]">
               Our Services
             </h4>
 
@@ -219,30 +262,15 @@ export function Footer() {
                 </Link>
               </li>
 
-              <li>
-                <Link
-                  href="/seo-checker-tool"
-                  className="transition-colors hover:text-[#4BEAFF]"
-                >
-                  SEO Checker Tool
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  href="/free-seo-audit"
-                  className="transition-colors hover:text-[#4BEAFF]"
-                >
-                  Free SEO Audit
-                </Link>
-              </li>
+             
 
             </ul>
           </div>
+      
 
           {/* CONTACT */}
           <div>
-            <h4 className="mb-5 text-[24px] font-semibold text-white">
+            <h4 className="mb-5 text-[24px] font-semibold text-[#4BEAFF]">
               Contact Us
             </h4>
 
@@ -300,7 +328,7 @@ export function Footer() {
         </div>
 
         {/* BOTTOM */}
-        <div className="mt-3 border-t border-white/10 pt-3">
+        <div className="mt-2 pt-2 border-t border-white/10">
 
           <div className="flex flex-col items-center justify-between gap-3 text-sm md:flex-row">
 
@@ -312,7 +340,7 @@ export function Footer() {
             <div className="flex flex-wrap items-center justify-center gap-4">
 
               <Link
-                href="/privacy-policy"
+                href="/privacy"
                 className="transition-colors hover:text-[#4BEAFF]"
               >
                 Privacy Policy

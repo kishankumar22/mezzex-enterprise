@@ -2,49 +2,143 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Head from 'next/head';
 import Image from 'next/image';
 import { submitContactForm } from '@/services/contact/submitContact';
 import TypewriterHeading from '@/components/common/TypewriterHeading';
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { PartnerSection } from '@/components/home/PartnerSection';
+
+// Services for dropdown
+const services = [
+  "Website Designing & Development",
+  "App Development",
+  "Software Development",
+  "Ecommerce Service",
+  "Digital Marketing",
+  "Warehouse Management",
+  "Other",
+];
+
+// Country type definition
+interface Country {
+  name: string;
+  flag: string;
+  dialCode: string;
+  code: string; // ISO code for reference
+}
+
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
-    phone: '',
+    service: '',
     subject: '',
     message: '',
-    captchaAnswer: '',
+    captchaAnswer: ''
   });
+  
+  // Phone states
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [filtered, setFiltered] = useState<Country[]>([]);
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  
+  // Form states
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{ success: boolean; message: string } | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   
-  // CAPTCHA state
+  // CAPTCHA states
   const [num1, setNum1] = useState(0);
   const [num2, setNum2] = useState(0);
   const [captchaValue, setCaptchaValue] = useState(0);
 
-  // Generate random CAPTCHA numbers
+  // Generate random CAPTCHA
   const generateCaptcha = () => {
-    const n1 = Math.floor(Math.random() * 10) + 1;
-    const n2 = Math.floor(Math.random() * 10) + 1;
-    setNum1(n1);
-    setNum2(n2);
-    setCaptchaValue(n1 + n2);
+    const newNum1 = Math.floor(Math.random() * 10) + 1;
+    const newNum2 = Math.floor(Math.random() * 10) + 1;
+    setNum1(newNum1);
+    setNum2(newNum2);
+    setCaptchaValue(newNum1 + newNum2);
   };
 
+  // Fetch countries on mount
   useEffect(() => {
+    async function fetchCountries() {
+      try {
+        const res = await fetch('https://restcountries.com/v3.1/all?fields=name,idd,cca2,flags');
+        const data = await res.json();
+        const parsed: Country[] = data
+          .map((c: any) => {
+            const root = c.idd?.root ?? '';
+            const suffix = c.idd?.suffixes?.[0] ?? '';
+            const dial = root && suffix ? `${root}${suffix}` : '';
+            if (!dial) return null;
+          return {
+            name: c.name?.common ?? '',
+            flag: c.flags?.png ?? c.flags?.svg ?? '',
+            dialCode: dial,
+            code: c.cca2 ?? '',
+          };
+          })
+          .filter((c: Country | null) => c !== null) as Country[];
+        
+        parsed.sort((a, b) => a.name.localeCompare(b.name));
+        setCountries(parsed);
+        setFiltered(parsed);
+        
+        const uk = parsed.find(c => c.name === 'United Kingdom');
+        setSelectedCountry(uk ?? parsed[0] ?? null);
+      } catch (e) {
+        console.error('Failed to load countries', e);
+      }
+    }
+    fetchCountries();
     generateCaptcha();
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // Search filter effect
+  useEffect(() => {
+    const term = search.trim().toLowerCase();
+    if (!term) {
+      setFiltered(countries);
+    } else {
+      setFiltered(
+        countries.filter(
+          c =>
+            c.name.toLowerCase().includes(term) ||
+            c.dialCode.includes(term)
+        )
+      );
+    }
+  }, [search, countries]);
+
+  // Click outside dropdown
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleCountrySelect = (c: Country) => {
+    setSelectedCountry(c);
+    setDropdownOpen(false);
+    setSearch('');
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when user types
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
@@ -54,32 +148,40 @@ export default function ContactPage() {
     e.preventDefault();
     const newErrors: { [key: string]: string } = {};
     
-    if (!formData.name.trim()) newErrors.name = 'Name is required.';
+    // Validation
     if (!formData.email.trim()) newErrors.email = 'Email is required.';
     else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(formData.email)) newErrors.email = 'Enter a valid email.';
-    if (!formData.phone.trim()) newErrors.phone = 'Phone number is required.';
+    
+    if (!phoneNumber.trim()) newErrors.phone = 'Phone number is required.';
+    if (!formData.service.trim()) newErrors.service = 'Service is required.';
     if (!formData.subject.trim()) newErrors.subject = 'Subject is required.';
     if (!formData.message.trim()) newErrors.message = 'Message cannot be empty.';
     
     // CAPTCHA validation
     const userAnswer = parseInt(formData.captchaAnswer);
     if (isNaN(userAnswer) || userAnswer !== captchaValue) {
-      newErrors.captcha = `Incorrect answer. Please solve ?`;
-      generateCaptcha(); // Refresh CAPTCHA on wrong answer
+      newErrors.captcha = `Incorrect answer. Please solve ${num1} + ${num2} = ?`;
+      generateCaptcha();
     }
     
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
     setIsSubmitting(true);
-    const result = await submitContactForm(formData);
+    const fullPhoneNumber = selectedCountry?.dialCode ? `${selectedCountry.dialCode} ${phoneNumber}` : phoneNumber;
+    const payload = { ...formData, phone: fullPhoneNumber };
+    const result = await submitContactForm(payload);
     setSubmitStatus(result);
     setIsSubmitting(false);
-    
+
     if (result.success) {
-      setFormData({ name: '', email: '', phone: '', subject: '', message: '', captchaAnswer: '' });
-      setErrors({});
-      generateCaptcha(); // New CAPTCHA after successful submit
+      setFormData({ email: '', service: '', subject: '', message: '', captchaAnswer: '' });
+      setPhoneNumber('');
+      setSelectedCountry(countries.find(c => c.name === 'United Kingdom') ?? null);
+      generateCaptcha();
+      
+      // Auto hide success message after 5 seconds
+      setTimeout(() => setSubmitStatus(null), 5000);
     }
   };
 
@@ -135,8 +237,8 @@ export default function ContactPage() {
         />
       </Head>
 
-      {/* Hero Section with Typewriter */}
-      <section className="py-4   md:py-8 text-center bg-gradient-to-br from-blue-50 to-white">
+      {/* Hero Section */}
+      <section className="py-4 md:py-8 text-center bg-gradient-to-br from-blue-50 to-white">
         <div className="container mx-auto px-4 lg:px-8">
           <TypewriterHeading
             words={['Connect with Us', 'With Mezzex', 'Get in Touch']}
@@ -168,8 +270,8 @@ export default function ContactPage() {
           >
             {/* Left Side - Illustration */}
             <motion.div variants={fadeInUp} className="flex flex-col items-center text-center lg:sticky lg:top-24">
-             <h5 className="text-2xl font-bold text-gray-900 mb-2">Tell Us About Your Project</h5>
-              <p className="text-gray-600 mb-4">Let’s discuss your project and find out what we can do to provide value.</p>
+              <h5 className="text-2xl font-bold text-blue-600 mb-2">Tell Us About Your Project</h5>
+              <p className="text-gray-600 mb-4">Let&apos;s discuss your project and find out what we can do to provide value.</p>
               <div className="relative w-128 h-128 md:w-128 md:h-128">
                 <Image
                   src="https://mezzex.com/images/form-gr-contact.svg"
@@ -179,7 +281,6 @@ export default function ContactPage() {
                   sizes="(max-width: 768px) 320px, 384px"
                 />
               </div>
-              
             </motion.div>
 
             {/* Right Side - Form */}
@@ -210,17 +311,6 @@ export default function ContactPage() {
               <form onSubmit={onSubmit} className="space-y-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Your Name *</label>
-                    <input
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className={`w-full px-4 py-3 rounded-lg border ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-[#2f5a84] focus:border-transparent outline-none transition-all`}
-                      placeholder="John Doe"
-                    />
-                    {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
-                  </div>
-                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
                     <input
                       name="email"
@@ -232,20 +322,103 @@ export default function ContactPage() {
                     />
                     {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
                   </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+                    <div className="flex">
+                      {/* Country selector - Only flag and dial code */}
+                      <div className="relative" ref={dropdownRef}>
+                        <button
+                          type="button"
+                          onClick={() => setDropdownOpen(!dropdownOpen)}
+                          className="flex items-center gap-2 px-3 py-3 border border-gray-300 rounded-l-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#2f5a84]"
+                        >
+                          {selectedCountry ? (
+                            <>
+                              <img
+  src={selectedCountry.flag}
+  alt={selectedCountry.name}
+  className="w-6 h-4 object-cover rounded-sm"
+/>
+                              <span className="text-sm font-medium">{selectedCountry.dialCode}</span>
+                            </>
+                          ) : (
+                            <span className="text-sm text-gray-500">Select</span>
+                          )}
+                          <svg
+                            className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        {dropdownOpen && (
+                          <div className="absolute z-10 mt-1 w-72 max-h-64 overflow-y-auto bg-white border border-gray-200 rounded-md shadow-lg">
+                            <div className="p-2 border-b border-gray-100 sticky top-0 bg-white">
+                              <input
+                                type="text"
+                                value={search}
+                                onChange={e => setSearch(e.target.value)}
+                                placeholder="Search country..."
+                                className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#2f5a84]"
+                              />
+                            </div>
+                            <ul className="text-sm">
+                              {filtered.map(c => (
+                                <li
+                                  key={c.name}
+                                  onClick={() => handleCountrySelect(c)}
+                                  className="flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-gray-50 transition-colors"
+                                >
+                                 <img
+  src={c.flag}
+  alt={c.name}
+  className="w-6 h-4 object-cover rounded-sm"
+/>
+                                  <span className="font-medium text-gray-900">{c.name}</span>
+                                  <span className="ml-auto text-gray-500 text-xs">{c.dialCode}</span>
+                                </li>
+                              ))}
+                              {filtered.length === 0 && (
+                                <li className="px-3 py-2 text-gray-400 text-center">No countries found</li>
+                              )}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                      {/* Phone number input */}
+                      <input
+                        type="tel"
+                        value={phoneNumber}
+                        onChange={e => setPhoneNumber(e.target.value)}
+                        className={`flex-1 px-4 py-2 w-32 border-t border-b border-r rounded-r-lg ${errors.phone ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-[#2f5a84] focus:border-transparent outline-none transition-all`}
+                        placeholder="123 456 7890"
+                        maxLength={10}
+                      />
+                    </div>
+                    {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone}</p>}
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
-                    <input
-                      name="phone"
-                      value={formData.phone}
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Select Service *</label>
+                    <select
+                      name="service"
+                      value={formData.service}
                       onChange={handleChange}
-                      className={`w-full px-4 py-3 rounded-lg border ${errors.phone ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-[#2f5a84] focus:border-transparent outline-none transition-all`}
-                      placeholder="+44 123 456 7890"
-                    />
-                    {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone}</p>}
+                      className={`w-full px-4 py-3 rounded-lg border ${errors.service ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-[#2f5a84] focus:border-transparent outline-none transition-all`}
+                    >
+                      <option value="" disabled>Select a service</option>
+                      {services.map((s) => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                    {errors.service && <p className="mt-1 text-sm text-red-600">{errors.service}</p>}
                   </div>
+                  
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Subject *</label>
                     <input
@@ -265,7 +438,7 @@ export default function ContactPage() {
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    rows={2}
+                    rows={4}
                     className={`w-full px-4 py-3 rounded-lg border ${errors.message ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-[#2f5a84] focus:border-transparent outline-none transition-all resize-none`}
                     placeholder="Tell us about your project requirements..."
                   />
@@ -302,94 +475,121 @@ export default function ContactPage() {
             </motion.div>
           </motion.div>
 
-          {/* Office & Contact Info - 3 Column Grid with Motion */}
+          {/* Office & Contact Info */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12"
           >
-            {/* UK Office Card */}
+            {/* UK Office */}
             <motion.div
               whileHover={{ y: -8, transition: { duration: 0.2 } }}
               className="group bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-xl transition-all duration-300"
             >
-              <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-[#2f5a84] transition-colors">
-                <MapPin className="w-7 h-7 text-[#2f5a84] group-hover:text-white transition-colors" />
+              <div className="flex items-center gap-4 mb-5">
+                <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center group-hover:bg-[#2f5a84] transition-colors">
+                  <MapPin className="w-7 h-7 text-[#2f5a84] group-hover:text-white transition-colors" />
+                </div>
+                <h5 className="text-xl font-bold text-gray-900">UK Office</h5>
               </div>
-              <h5 className="text-xl font-bold text-gray-900 mb-3">UK Office</h5>
               <p className="text-gray-600 leading-relaxed">
-                Spacebox Business Park Unit E, 38 Plume Street, Birmingham B6 7RT, United Kingdom
+                Spacebox Business Park Unit E, 38 Plume Street,
+                Birmingham B6 7RT, United Kingdom
               </p>
             </motion.div>
 
-            {/* India Office Card */}
+            {/* India Office */}
             <motion.div
               whileHover={{ y: -8, transition: { duration: 0.2 } }}
               className="group bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-xl transition-all duration-300"
             >
-              <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-[#2f5a84] transition-colors">
-                <MapPin className="w-7 h-7 text-[#2f5a84] group-hover:text-white transition-colors" />
+              <div className="flex items-center gap-4 mb-5">
+                <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center group-hover:bg-[#2f5a84] transition-colors">
+                  <MapPin className="w-7 h-7 text-[#2f5a84] group-hover:text-white transition-colors" />
+                </div>
+                <h5 className="text-xl font-bold text-gray-900">India Office</h5>
               </div>
-              <h5 className="text-xl font-bold text-gray-900 mb-3">India Office</h5>
               <p className="text-gray-600 leading-relaxed">
-                A 624 Logix Technova, Sector 132, Noida, Uttar Pradesh 201301, India
+                A 624 Logix Technova, Sector 132, Noida,
+                Uttar Pradesh 201301, India
               </p>
             </motion.div>
 
-            {/* Work Hours Card */}
+            {/* Working Hours */}
             <motion.div
               whileHover={{ y: -8, transition: { duration: 0.2 } }}
               className="group bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-xl transition-all duration-300"
             >
-              <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-[#2f5a84] transition-colors">
-                <Clock className="w-7 h-7 text-[#2f5a84] group-hover:text-white transition-colors" />
+              <div className="flex items-center gap-4 mb-5">
+                <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center group-hover:bg-[#2f5a84] transition-colors">
+                  <Clock className="w-7 h-7 text-[#2f5a84] group-hover:text-white transition-colors" />
+                </div>
+                <h5 className="text-xl font-bold text-gray-900">Working Hours</h5>
               </div>
-              <h5 className="text-xl font-bold text-gray-900 mb-3">Working Hours</h5>
               <p className="text-gray-600 leading-relaxed">
-                Monday to Friday<br />
-                8:00 AM - 5:00 PM (GMT)<br />
-                Saturday & Sunday: Closed
+                Monday to Friday
+                <br />
+                8:00 AM - 5:00 PM (GMT)
+                <br />
+                Saturday &amp; Sunday: Closed
               </p>
             </motion.div>
 
-            {/* Phone Card */}
+            {/* Phone */}
             <motion.div
               whileHover={{ y: -8, transition: { duration: 0.2 } }}
               className="group bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-xl transition-all duration-300"
             >
-              <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-[#2f5a84] transition-colors">
-                <Phone className="w-7 h-7 text-[#2f5a84] group-hover:text-white transition-colors" />
+              <div className="flex items-center gap-4 mb-5">
+                <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center group-hover:bg-[#2f5a84] transition-colors">
+                  <Phone className="w-7 h-7 text-[#2f5a84] group-hover:text-white transition-colors" />
+                </div>
+                <h5 className="text-xl font-bold text-gray-900">Phone Number</h5>
               </div>
-              <h5 className="text-xl font-bold text-gray-900 mb-3">Phone Number</h5>
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-2xl">🇬🇧</span>
-                <a href="tel:+441216616357" className="text-[#2f5a84] hover:text-[#1a3855] font-medium text-lg transition-colors">
+                <a
+                  href="tel:+441216616357"
+                  className="text-[#2f5a84] hover:text-[#1a3855] font-medium text-lg transition-colors"
+                >
                   +44 121-6616357
                 </a>
               </div>
-              <p className="text-gray-500 text-sm">Available during working hours</p>
+              <p className="text-gray-500 text-sm">
+                Available during working hours
+              </p>
             </motion.div>
 
-            {/* Email Card */}
+            {/* Email */}
             <motion.div
               whileHover={{ y: -8, transition: { duration: 0.2 } }}
               className="group bg-white rounded-2xl shadow-md border border-gray-100 p-6 hover:shadow-xl transition-all duration-300"
             >
-              <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-[#2f5a84] transition-colors">
-                <Mail className="w-7 h-7 text-[#2f5a84] group-hover:text-white transition-colors" />
+              <div className="flex items-center gap-4 mb-5">
+                <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center group-hover:bg-[#2f5a84] transition-colors">
+                  <Mail className="w-7 h-7 text-[#2f5a84] group-hover:text-white transition-colors" />
+                </div>
+                <h5 className="text-xl font-bold text-gray-900">Email Address</h5>
               </div>
-              <h5 className="text-xl font-bold text-gray-900 mb-3">Email Address</h5>
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-2xl">🇬🇧</span>
-                <a href="mailto:info@mezzex.com" className="text-[#2f5a84] hover:text-[#1a3855] font-medium text-lg transition-colors break-all">
+                <a
+                  href="mailto:info@mezzex.com"
+                  className="text-[#2f5a84] hover:text-[#1a3855] font-medium text-lg transition-colors break-all"
+                >
                   info@mezzex.com
                 </a>
               </div>
-              <p className="text-gray-500 text-sm">We respond within 24 hours</p>
+              <p className="text-gray-500 text-sm">
+                We respond within 24 hours
+              </p>
             </motion.div>
           </motion.div>
+        </div>
+        <div className='py-3'>
+          <PartnerSection />   
         </div>
       </section>
     </>

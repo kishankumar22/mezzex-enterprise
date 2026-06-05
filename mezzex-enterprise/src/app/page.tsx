@@ -14,7 +14,6 @@ export default function Home() {
     <>
       <HeroSection />
       <ServicesSection />
-      <CounterSection />
       <WorkProcess />
       <WhyPartner />
       <OtherServices />

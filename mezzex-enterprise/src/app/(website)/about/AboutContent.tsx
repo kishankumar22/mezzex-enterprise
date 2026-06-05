@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { PartnerSection } from '@/components/home/PartnerSection';
 import TypewriterHeading from '@/components/common/TypewriterHeading';
 
+
 export default function AboutContent() {
   return (
     <main className="flex flex-col gap-12 bg-[#f8fbff]">

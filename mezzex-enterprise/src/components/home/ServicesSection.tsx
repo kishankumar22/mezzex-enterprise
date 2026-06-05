@@ -15,6 +15,7 @@ import {
 
 import { Service } from '@/types/service';
 import { getServices } from '@/services/services/getServices';
+import { COMPANY_STATS, CounterSection } from './CounterSection';
 
 const iconMap: Record<string, React.ReactNode> = {
   Monitor: <Monitor className="h-8 w-8" />,
@@ -207,6 +208,8 @@ export function ServicesSection() {
 
         </div>
       </div>
+
+      <CounterSection stats={COMPANY_STATS} />
     </section>
   );
 }

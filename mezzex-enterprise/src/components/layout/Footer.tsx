@@ -13,7 +13,7 @@ export function Footer() {
   return (
     <footer className="overflow-hidden bg-[#071321] text-gray-300">
       {/* TOP */}
-      <div className="container mx-auto px-5 py-5 lg:px-6 lg:py-12">
+      <div className="container mx-auto px-5 py-5 lg:px-6 p-2 lg:pt-12">
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-5">
 
@@ -93,7 +93,7 @@ export function Footer() {
 
           {/* COMPANY LINKS */}
           <div>
-            <h4 className="mb-5 text-[24px] font-semibold text-[#4BEAFF]">
+            <h4 className="mb-5 text-[24px] font-semibold ">
               Company
             </h4>
 
@@ -158,7 +158,7 @@ export function Footer() {
 
               {/* HELP */}
           <div>
-            <h4 className="mb-5 text-[24px] font-semibold text-[#4BEAFF]">Let Us Help You</h4>
+            <h4 className="mb-5 text-[24px] font-semibold ">Let Us Help You</h4>
             <ul className="space-y-3 text-[15px]">
               <li>
                 <Link href="/privacy" className="transition-colors hover:text-[#4BEAFF]">
@@ -202,7 +202,7 @@ export function Footer() {
 
           {/* SERVICES */}
           <div>
-            <h4 className="mb-5 text-[24px] font-semibold text-[#4BEAFF]">
+            <h4 className="mb-5 text-[24px] font-semibold ">
               Our Services
             </h4>
 
@@ -270,7 +270,7 @@ export function Footer() {
 
           {/* CONTACT */}
           <div>
-            <h4 className="mb-5 text-[24px] font-semibold text-[#4BEAFF]">
+            <h4 className="mb-5 text-[24px] font-semibold">
               Contact Us
             </h4>
 

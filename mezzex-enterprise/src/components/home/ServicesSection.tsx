@@ -40,10 +40,9 @@ export function ServicesSection() {
 
   return (
     <section
-      id="services"
-      className="bg-gray-50 py-14 md:py-20"
+      className="bg-gray-50"  
     >
-      <div className="container mx-auto max-w-7xl px-4 lg:px-8">
+      <div className="container py-12 mx-auto max-w-7xl px-4 lg:px-8">
 
         {/* HEADING */}
     <div className="mx-auto mb-12 max-w-6xl text-center">

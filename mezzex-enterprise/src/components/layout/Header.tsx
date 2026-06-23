@@ -36,7 +36,7 @@ export function Header() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
+          <Link href="https://mezzex.com" target='_blank' className="flex-shrink-0">
             <Image
               src={siteConfig.logo}
               alt="Mezzex Logo"
@@ -58,8 +58,8 @@ export function Header() {
                 <Link
                   href={item.href}
                   className={cn(
-                    'text-sm font-medium transition-colors hover:text-[#4BEAFF] px-2 py-2 flex items-center',
-                    pathname === item.href ? 'text-[#4BEAFF]' : isScrolled ? 'text-gray-900' : 'text-gray-800'
+                    'text-sm font-medium transition-colors hover:text-[#2f5a84] px-2 py-2 flex items-center',
+                    pathname === item.href ? 'text-[#2f5a84]' : isScrolled ? 'text-gray-900' : 'text-gray-800'
                   )}
                 >
                   {item.label}

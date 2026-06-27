@@ -24,6 +24,8 @@
 # production
 /build
 
+# bloggie
+/Bloggie/
 # misc
 .DS_Store
 *.pem

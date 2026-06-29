@@ -65,13 +65,6 @@ Phone: +44 121-661 6357`
 
   return (
     <section className="bg-white text-gray-800">
-      {/* Breadcrumb */}
-      <div className="flex justify-center mt-2">
-        <TypewriterHeading
-          words={["Terms & Condition – Mezzex"]}
-          className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1a3855]"
-        />
-      </div>
       {/* Main Content */}
       <motion.div
         className="container mx-auto py-2"

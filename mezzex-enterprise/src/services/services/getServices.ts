@@ -44,7 +44,7 @@ export const mockServices: Service[] = [
   {
     id: 5,
     title: 'E-Commerce Services',
-    slug: 'ecommerce-service',
+    slug: 'ecommerce-services',
     shortDescription: 'Position your e‑commerce business website on the top search engine result pages of relevant web searches on Google and Bing. Ensure your website is easily discoverability, drives relevant traffic, and delivers top ROI. Access quality e‑commerce services bound with e‑commerc.',
     fullDescription: 'Position your e-commerce business website on the top search engine result pages of relevant web searches on Google and Bing.',
     icon: 'ShoppingCart',

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { PartnerSection } from '@/components/home/PartnerSection';
+import BreadcrumbSetter from '@/components/common/BreadcrumbSetter';
 import { 
   FaSearch, FaTachometerAlt, FaLink, FaChartBar, 
   FaCheckDouble , FaCode, FaFileAlt, FaArrowRight, 
@@ -111,21 +112,13 @@ export default function FreeAuditContent() {
 
   return (
     <div className="bg-white text-gray-800">
-      {/* Breadcrumb */}
-      <section className="relative bg-gradient-to-r from-[#1a3855] to-[#2f5a84] py-12 md:py-16">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center md:text-left">
-            <div className="flex items-center gap-2 text-white/80 text-sm mb-3 flex-wrap">
-              <a href="/" className="hover:text-white transition-colors">
-                <span className="inline-block mr-1">🏠</span> home
-              </a>
-              <span className="text-white/50">›</span>
-              <span className="text-white font-medium">Free SEO Audit</span>
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white">Free SEO Audit Report</h1>
-          </div>
-        </div>
-      </section>
+      <BreadcrumbSetter
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Free SEO Audit', active: true }
+        ]}
+        title="Free SEO Audit Report"
+      />
 
       {/* Main Content */}
       <section className="py-12 md:py-16">

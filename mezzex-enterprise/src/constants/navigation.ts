@@ -39,7 +39,7 @@ export const navigation: NavItem[] = [
         ],
       },
       { label: 'App Development', href: '/services/app-development' },
-      { label: 'Ecommerce Services', href: '/services/ecommerce-service' },
+      { label: 'Ecommerce Services', href: '/services/ecommerce-services' },
       { label: 'Warehouse Management', href: '/services/warehouse-management' },
       { label: 'Amazon Services', href: '/services/amazon-services' },
     ],

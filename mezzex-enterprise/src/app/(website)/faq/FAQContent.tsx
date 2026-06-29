@@ -58,14 +58,6 @@ export default function FAQContent() {
 
   return (
     <section className="bg-white text-gray-800">
-      {/* Breadcrumb */}
-      <div className="flex justify-center mt-2">
-        <TypewriterHeading
-          words={["FAQ – Mezzex"]}
-          className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1a3855]"
-        />
-      </div>
-
       {/* Main Content */}
       <motion.div
         className="container mx-auto py-2 px-4 lg:px-8"

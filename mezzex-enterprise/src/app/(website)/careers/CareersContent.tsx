@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import BreadcrumbSetter from '@/components/common/BreadcrumbSetter';
 import { 
   Briefcase, 
   MapPin, 
@@ -259,24 +260,13 @@ export default function CareersContent() {
 
   return (
     <div className="bg-white min-h-screen text-gray-800">
-      {/* Breadcrumb section */}
-      <section className="relative bg-[#2f5a84] py-16 text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-        <div className="container mx-auto px-4 lg:px-8 relative">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-            <div>
-              <nav className="flex items-center space-x-2 text-sm text-[#4BEAFF] mb-4">
-                <Link href="/" className="hover:underline flex items-center gap-1 font-medium">
-                  <Home className="w-3.5 h-3.5" /> Home
-                </Link>
-                <span>/</span>
-                <span className="text-white font-medium">Careers</span>
-              </nav>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Join Our Family</h1>
-            </div>
-          </div>
-        </div>
-      </section>
+      <BreadcrumbSetter
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Careers', active: true }
+        ]}
+        title="Join Our Family"
+      />
 
       {/* Main Info Intro Section */}
       <section className="py-16 md:py-24 container mx-auto px-4 lg:px-8">

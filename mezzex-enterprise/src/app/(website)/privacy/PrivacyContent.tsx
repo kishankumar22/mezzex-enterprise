@@ -7,13 +7,6 @@ import TypewriterHeading from "@/components/common/TypewriterHeading";
 export default function PrivacyContent() {
   return (
     <section className="bg-white text-gray-800" id="main-faq-page">
-      {/* Breadcrumb */}
- <div className="flex justify-center">
-       <TypewriterHeading
-                 words={['Privacy Policy – Mezzex']}
-                 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#1a3855]"
-               />
- </div>
       {/* Main Content */}
       <motion.div
         className="container mx-auto py-4"

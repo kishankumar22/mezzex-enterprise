@@ -3,6 +3,7 @@
 import { useState, useEffect, useTransition } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import BreadcrumbSetter from '@/components/common/BreadcrumbSetter';
 import { 
   Monitor, 
   Code, 
@@ -102,9 +103,15 @@ export default function ServicesContent() {
       }
     });
   };
+ const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "Services", active: true }
+  ];
 
   return (
-    <div className="bg-white min-h-screen text-slate-800 font-sans selection:bg-[#4BEAFF] selection:text-slate-900 overflow-x-hidden">
+    <div className="bg-white min-h-screen text-slate-800 font-sans overflow-x-hidden">
+        {/* ✅ Breadcrumb with correct items */}
+      <BreadcrumbSetter items={breadcrumbs} title="Services" />
       
       {/* 1. HERO SECTION (COSMIC BANNER) */}
       <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden bg-slate-950 py-20">

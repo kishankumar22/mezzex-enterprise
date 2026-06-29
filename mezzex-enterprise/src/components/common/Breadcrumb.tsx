@@ -1,5 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
+import { Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface BreadcrumbItem {
@@ -22,74 +23,62 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
 }) => {
   if (!items?.length) return null;
 
-  return (
-    <section className="bg-gray-100 border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-        <nav
-          aria-label="breadcrumb"
-          className={cn(
-            "flex items-center justify-between",
-            className
-          )}
-          {...props}
-        >
-          {/* Left Side Breadcrumb */}
-          <ol className="inline-flex items-center flex-wrap text-sm text-gray-600">
-            {items.map((item, idx) => {
-              const isLast =
-                idx === items.length - 1 || item.active;
+  // Fallback title: last item label if no explicit title is provided
+  const displayTitle = title || items[items.length - 1]?.label;
 
-              const content =
-                item.href && !isLast ? (
-                  <Link
-                    href={item.href}
-                    className="hover:text-[#2f5a84] transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                ) : (
-                  <span
-                    className={cn(
-                      isLast &&
-                        "font-semibold text-gray-900"
-                    )}
-                  >
-                    {item.label}
-                  </span>
-                );
+  return (
+    <section className="relative bg-[#2f5a84] py-5 md:py-16 text-white overflow-hidden w-full">
+      {/* Background Grid/Radial Overlay */}
+      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+      
+      <div className="container mx-auto px-4 lg:px-8 relative z-10">
+        <div className="flex flex-col">
+          <nav
+            aria-label="breadcrumb"
+            className={cn(
+              "flex flex-wrap items-center gap-1.5 text-xs md:text-sm text-[#4BEAFF] mb-0 md:mb-4 font-medium",
+              className
+            )}
+            {...props}
+          >
+            {items.map((item, idx) => {
+              const isLast = idx === items.length - 1 || item.active;
+              const isHome = idx === 0 && (item.label.toLowerCase() === "home" || item.href === "/");
+
+              const content = item.href && !isLast ? (
+                <Link
+                  href={item.href}
+                  className="hover:underline inline-flex items-center gap-1 hover:text-white transition-colors"
+                >
+                  {isHome && <Home className="w-3.5 h-3.5" />}
+                  {item.label}
+                </Link>
+              ) : (
+                <span
+                  className={cn(
+                    "inline-flex items-center gap-1 select-none",
+                    isLast ? "text-white font-semibold" : "text-[#4BEAFF]"
+                  )}
+                >
+                  {isHome && <Home className="w-3.5 h-3.5" />}
+                  {item.label}
+                </span>
+              );
 
               return (
-                <li
-                  key={`${item.label}-${idx}`}
-                  className="flex items-center"
-                >
+                <React.Fragment key={`${item.label}-${idx}`}>
                   {content}
-
-                  {!isLast && (
-                    <svg
-                      className="w-3 h-3 mx-2 text-gray-400"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  )}
-                </li>
+                  {!isLast && <span className="text-[#4BEAFF]/70 select-none">/</span>}
+                </React.Fragment>
               );
             })}
-          </ol>
-
-          {/* Right Side Title - Desktop Only */}
-          {title && (
-            <h1 className="hidden md:block text-3xl font-bold text-[#2f5a84]">
-              {title}
+          </nav>
+          {displayTitle && (
+            <h1 className="hidden md:block text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white leading-tight">
+              {displayTitle}
             </h1>
           )}
-        </nav>
+        </div>
       </div>
     </section>
   );

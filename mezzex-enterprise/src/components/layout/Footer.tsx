@@ -246,7 +246,7 @@ export function Footer() {
 
               <li>
                 <Link
-                  href="/services/ecommerce-service"
+                  href="/services/ecommerce-services"
                   className="transition-colors hover:text-[#4BEAFF]"
                 >
                   E-Commerce Services

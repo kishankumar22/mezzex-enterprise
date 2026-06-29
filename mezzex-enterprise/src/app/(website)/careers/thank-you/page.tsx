@@ -3,6 +3,8 @@ import { generatePageMetadata } from '@/seo/metadata';
 import Link from 'next/link';
 import { Home, ArrowRight, Heart } from 'lucide-react';
 
+import BreadcrumbSetter from '@/components/common/BreadcrumbSetter';
+
 export const metadata: Metadata = generatePageMetadata({
   title: 'Thank You for Applying – Careers',
   description: 'Thank you for submitting your job application to Mezzex. We will get back to you shortly.',
@@ -12,24 +14,14 @@ export const metadata: Metadata = generatePageMetadata({
 export default function ThankYouPage() {
   return (
     <div className="bg-white min-h-screen">
-      {/* Breadcrumb section */}
-      <section className="relative bg-[#2f5a84] py-16 text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-        <div className="container mx-auto px-4 lg:px-8 relative">
-          <nav className="flex items-center space-x-2 text-sm text-[#4BEAFF] mb-4">
-            <Link href="/" className="hover:underline flex items-center gap-1 font-medium">
-              <Home className="w-3.5 h-3.5" /> Home
-            </Link>
-            <span>/</span>
-            <Link href="/careers" className="hover:underline font-medium">
-              Careers
-            </Link>
-            <span>/</span>
-            <span className="text-white font-medium">Thank You</span>
-          </nav>
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Application Received</h1>
-        </div>
-      </section>
+      <BreadcrumbSetter
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Careers', href: '/careers' },
+          { label: 'Thank You', active: true }
+        ]}
+        title="Application Received"
+      />
 
       {/* Thank you message container */}
       <section className="py-20 md:py-32 max-w-2xl mx-auto px-4 text-center space-y-8">

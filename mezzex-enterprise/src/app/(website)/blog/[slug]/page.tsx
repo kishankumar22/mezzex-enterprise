@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { ArrowLeft, Calendar, User, Clock } from 'lucide-react';
 import { formatDate } from '@/utils/formatDate';
 
+import BreadcrumbSetter from '@/components/common/BreadcrumbSetter';
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const blog = await getBlogBySlug(slug);
@@ -27,9 +29,16 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
     notFound();
   }
 
+  const breadcrumbs = [
+    { label: 'Home', href: '/' },
+    { label: 'Blog', href: '/blog' },
+    { label: blog.title, active: true }
+  ];
+
   return (
-    <article className="pt-3 pb-4 min-h-screen">
-      <div className="container mx-auto px-4 lg:px-8">
+    <article className="pb-4 min-h-screen">
+      <BreadcrumbSetter items={breadcrumbs} title={blog.title} />
+      <div className="container mx-auto px-4 lg:px-8 mt-8">
         
         <div className="max-w-4xl mx-auto">
           <Link href="/blog" className="inline-flex items-center text-gray-500 hover:text-[#2f5a84] mb-8 font-medium transition-colors">
@@ -40,9 +49,6 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             <span className="inline-block bg-[#4BEAFF]/20 text-[#2f5a84] px-4 py-1.5 rounded-full text-sm font-semibold mb-4">
               {blog.category}
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-              {blog.title}
-            </h1>
             
             <div className="flex flex-wrap items-center text-gray-500 gap-6 py-6 border-y border-gray-100">
               <div className="flex items-center">

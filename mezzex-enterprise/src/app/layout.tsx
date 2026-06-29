@@ -7,6 +7,7 @@ import { SmoothScrollProvider } from '@/providers/SmoothScrollProvider';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { cn } from '@/lib/utils';
+import ScrollButton from '@/components/common/ScrollButton';
 
 const geist = Geist({
   subsets: ['latin'],
@@ -228,6 +229,7 @@ export default function RootLayout({
           </main>
 
           <Footer />
+          <ScrollButton />
         </SmoothScrollProvider>
       </body>
     </html>

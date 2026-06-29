@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Head from 'next/head';
 import Image from 'next/image';
+import BreadcrumbSetter from '@/components/common/BreadcrumbSetter';
 import { submitContactForm } from '@/services/contact/submitContact';
 import TypewriterHeading from '@/components/common/TypewriterHeading';
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle, AlertCircle } from 'lucide-react';
@@ -238,16 +239,21 @@ export default function ContactPage() {
       </Head>
 
       {/* Hero Section */}
-      <section className="py-4 md:py-8 text-center bg-gradient-to-br from-blue-50 to-white">
+      <BreadcrumbSetter
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Contact Us', active: true }
+        ]}
+        title="Connect with Us"
+      />
+
+      {/* Intro Description */}
+      <section className="py-8 text-center bg-white border-b border-gray-100">
         <div className="container mx-auto px-4 lg:px-8">
-          <TypewriterHeading
-            words={['Connect with Us', 'With Mezzex', 'Get in Touch']}
-            className="mb-4 min-h-[60px] text-3xl md:text-4xl lg:text-5xl font-bold text-[#1a3855]"
-          />
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
             className="text-gray-600 max-w-2xl mx-auto text-lg"
           >
             Feel free to write to us about any query, and we will get in touch with you promptly. 
